@@ -1,2 +1,2 @@
-Hapi database-init
+Hapi mongodb-init
 ---

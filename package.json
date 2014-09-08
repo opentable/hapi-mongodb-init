@@ -1,7 +1,7 @@
 {
-  "name": "hapi-database-init",
+  "name": "hapi-mongodb-init",
   "version": "0.0.1",
-  "description": "initialises shared db connections for hapi",
+  "description": "initialises mongo db connections for hapi",
   "main": "index.js",
   "scripts": {
     "test": "grunt"
