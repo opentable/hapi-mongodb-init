@@ -1,0 +1,33 @@
+{
+  "name": "hapi-database-init",
+  "version": "0.0.1",
+  "description": "initialises shared db connections for hapi",
+  "main": "index.js",
+  "scripts": {
+    "test": "grunt"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:opentable/hapi-database-init.git"
+  },
+  "keywords": [
+    "hapiplugin",
+    "db"
+  ],
+  "author": "Andy Royle <ajroyle@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/opentable/hapi-database-init/issues"
+  },
+  "homepage": "https://github.com/opentable/hapi-database-init",
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-cli": "^0.1.13",
+    "grunt-contrib-jshint": "^0.10.0",
+    "grunt-mocha-test": "^0.11.0",
+    "mongodb": "^1.4.7"
+  },
+  "dependencies": {
+    "async": "^0.9.0"
+  }
+}
