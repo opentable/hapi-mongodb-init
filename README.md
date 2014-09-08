@@ -1,6 +1,10 @@
 Hapi mongodb-init
 ---
 
+Initialises mongodb connections (per database), and manages indexes.
+
+This module doesn't explicitly depend on mongodb, but requires it to be passed in on the options. This means you're free to use your favourite version. Tested with 1.47. and up.
+
 ```
 var hapi = require("hapi");
 
