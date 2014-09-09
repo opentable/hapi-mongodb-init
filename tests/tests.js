@@ -1,10 +1,15 @@
 describe('db-init tests', function(){
-    var should = require('should');
-    var actualIndexes = [{
+    var should = require('should'),
+        p = require('../index.js'),
+        actualIndexes = [{
       name: 'shouldbedropped'
-    }];
-    var ensuredIndexes = [];
-    var droppedIndexes = [];
+    }],
+        ensuredIndexes = [],
+        droppedIndexes = [],
+        plugin = {
+            log: function(){},
+            expose: function(){}
+        };
 
     var fakeMongo = {
       connect: function(a, b, cb){
@@ -35,11 +40,6 @@ describe('db-init tests', function(){
     });
 
     it('should open the db connections', function(done){
-        var p = require('../index.js'),
-            plugin = {
-                log: function(){}
-            };
-
         p.register(plugin, {
           dbs: [{
                connectionString: 'mongodb://127.0.0.1/test',
@@ -52,11 +52,6 @@ describe('db-init tests', function(){
     });
 
     it('should ensure the indexes', function(done){
-        var p = require('../index.js'),
-            plugin = {
-                log: function(){}
-            };
-
         p.register(plugin, {
           dbs: [{
                connectionString: 'mongodb://127.0.0.1/test',
@@ -79,11 +74,6 @@ describe('db-init tests', function(){
     });
 
     it('should drop unlisted indexes', function(done){
-        var p = require('../index.js'),
-            plugin = {
-                log: function(){}
-            };
-
         p.register(plugin, {
           dbs: [{
                connectionString: 'mongodb://127.0.0.1/test',

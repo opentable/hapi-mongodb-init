@@ -1,8 +1,13 @@
-var db = require("./lib/db"),
+var Db = require("./lib/db"),
     indexes = require("./lib/indexes"),
     async = require("async");
 
 exports.register = function(plugin, options, next){
+
+    var db = new Db();
+
+    plugin.expose('database', db);
+
     plugin.log(["database-init"], "initialising db connections");
 
     var connect = function(connectionInfo, done){
