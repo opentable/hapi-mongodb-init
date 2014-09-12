@@ -1,6 +1,6 @@
 {
   "name": "hapi-mongodb-init",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "initialises mongo db connections for hapi",
   "main": "index.js",
   "scripts": {
