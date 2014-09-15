@@ -16,7 +16,7 @@ exports.register = function(plugin, options, next){
               return done(err);
             }
 
-            plugin.log(["database-init"], "Opened connection for: " + connectionInfo.collection);
+            plugin.log(["database-init"], "Opened connection for: " + connectionInfo.name);
             done();
         });
     };
