@@ -7,7 +7,7 @@ describe('db-init tests', function(){
         ensuredIndexes = [],
         droppedIndexes = [],
         plugin = {
-            log: function(tags, log){},// console.log(log); },
+            log: function(tags, log){},
             expose: function(n, v){
               db = v;
             }
