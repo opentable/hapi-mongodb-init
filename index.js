@@ -1,12 +1,8 @@
-var Db = require("./lib/db"),
+var db = require("./lib/db"),
     indexes = require("./lib/indexes"),
     async = require("async");
 
 exports.register = function(plugin, options, next){
-
-    var db = new Db();
-
-    plugin.expose('database', db);
 
     plugin.log(["database-init"], "initialising db connections");
 
@@ -24,6 +20,10 @@ exports.register = function(plugin, options, next){
     async.forEach(options.dbs, connect, function(err){
       next(err);
     });
+};
+
+exports.db = function(name){
+  return db.get(name);
 };
 
 exports.register.attributes = {

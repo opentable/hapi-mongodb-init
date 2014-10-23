@@ -5,6 +5,8 @@ Initialises mongodb connections (per database), and manages indexes.
 
 This module doesn't explicitly depend on mongodb, but requires it to be passed in on the options. This means you're free to use your favourite version. Tested with 1.4.7 and up.
 
+To initialise:
+
 ```
 var hapi = require("hapi");
 
@@ -15,6 +17,7 @@ server.plugin.register({
   options: {
     dbs: [{
          connectionString: 'mongodb://127.0.0.1/test',
+         name: 'myconnection',
          indexes: [
           {
               collection: 'mycoll',
@@ -30,3 +33,17 @@ server.plugin.register({
 });
 
 ```
+
+To use inside a module:
+
+```
+var dbs = require('hapi-mongodb-init');
+
+var db = dbs.db('myconnection');
+
+db.collection('mycoll').findOne({ myfield: 'foo'}, function(err, value){
+  console.log(value);
+});
+```
+
+

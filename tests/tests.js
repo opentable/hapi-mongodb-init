@@ -7,7 +7,7 @@ describe('db-init tests', function(){
         ensuredIndexes = [],
         droppedIndexes = [],
         plugin = {
-            log: function(){},
+            log: function(tags, log){},// console.log(log); },
             expose: function(n, v){
               db = v;
             }
@@ -15,13 +15,22 @@ describe('db-init tests', function(){
 
     var fakeMongo = {
       connect: function(a, b, cb){
+
+        if(a == "error"){
+          return cb(new Error("connect has exploded"));
+        }
+
         cb(null, {
           collection: function(){
             return {
-              indexes: function(){
-                return actualIndexes;
+              indexes: function(cb){
+                cb(null, actualIndexes);
               },
               ensureIndex: function(x, y, callback){
+                if(x == "error"){
+                  return cb(new Error("ensureIndex has exploded"));
+                }
+
                 ensuredIndexes.push({ fields: x, names: y });
                 callback();
               },
@@ -34,7 +43,7 @@ describe('db-init tests', function(){
           on: function(event, fn){}
         });
       }
-    }
+    };
 
     beforeEach(function(){
       ensuredIndexes = [];
@@ -45,6 +54,7 @@ describe('db-init tests', function(){
         p.register(plugin, {
           dbs: [{
                connectionString: 'mongodb://127.0.0.1/test',
+               name: 'myconnection',
                indexes: []
             }],
             mongo: fakeMongo
@@ -79,6 +89,7 @@ describe('db-init tests', function(){
         p.register(plugin, {
           dbs: [{
                connectionString: 'mongodb://127.0.0.1/test',
+               name: 'myconnection',
                indexes: [
                 {
                     collection: 'mycoll',
@@ -99,14 +110,46 @@ describe('db-init tests', function(){
     it('should expose the db connections using the get method', function(done){
       p.register(plugin, {
         dbs: [{
-             connectionString: 'mongodb://127.0.0.1/test',
+             connectionString: 'mongodb://127.0.0.1:27017',
+             name: 'myconnection',
              indexes: []
           }],
           mongo: fakeMongo
         }, function(err){
 
-          db.get('mongodb://127.0.0.1/test').should.not.eql(undefined);
+          p.db('myconnection').should.not.eql(undefined);
           done(err);
+      });
+    });
+
+    describe('error handling', function(){
+      it('should handle an error in connect', function(done){
+        p.register(plugin, {
+          dbs: [{
+               connectionString: 'error',
+               name: 'myconnection',
+               indexes: []
+            }],
+            mongo: fakeMongo
+          }, function(err){
+            done(err == undefined ? new Error("expected an error from connect") : undefined);
+        });
+      });
+
+      it('should handle an error in ensureIndex', function(done){
+        p.register(plugin, {
+          dbs: [{
+               connectionString: 'mongodb://127.0.0.1:27017',
+               name: 'myconnection',
+               indexes: [{
+                 collection: 'error',
+                 fields: 'error'
+               }]
+            }],
+            mongo: fakeMongo
+          }, function(err){
+            done(err == undefined ? new Error("expected an error from ensureIndex") : undefined);
+        });
       });
     });
 });
