@@ -2,8 +2,11 @@ describe('db-init tests', function(){
     var should = require('should'),
         p = require('../index.js'),
         db, actualIndexes = [{
-      name: 'shouldbedropped'
-    }],
+          name: 'shouldbedropped'
+        },
+        {
+          name: '_id'
+        }],
         ensuredIndexes = [],
         droppedIndexes = [],
         plugin = {
@@ -103,6 +106,30 @@ describe('db-init tests', function(){
             mongo: fakeMongo
           }, function(err){
             droppedIndexes[0].should.eql('shouldbedropped');
+            done(err);
+        });
+    });
+
+    it('should not drop the _id_ index', function(done){
+        p.register(plugin, {
+          dbs: [{
+               connectionString: 'mongodb://127.0.0.1/test',
+               name: 'myconnection',
+               indexes: [
+                {
+                    collection: 'mycoll',
+                    name: "myfield_1",
+                    fields: {
+                        myfield: 1
+                    }
+                }
+               ]
+            }],
+            mongo: fakeMongo
+          }, function(err){
+            droppedIndexes.forEach(function(d){
+              d.should.not.eql('_id_');
+            });
             done(err);
         });
     });
