@@ -46,4 +46,23 @@ db.collection('mycoll').findOne({ myfield: 'foo'}, function(err, value){
 });
 ```
 
+__You're managing indexes inside your app, isn't that dangerous?__
 
+For small data sets, (where building indexes is trivial), we find it works.
+
+You can turn off the index management by setting:
+
+```
+server.plugin.register({
+  plugin: require("hapi-mongodb-init"),
+  options: {
+    dbs: [{
+         connectionString: 'mongodb://127.0.0.1/test',
+         name: 'myconnection',
+         manageIndexes: false
+      }],
+      mongo: require("mongodb")
+  }
+});
+
+```

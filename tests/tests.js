@@ -107,6 +107,20 @@ describe('db-init tests', function(){
         });
     });
 
+    it('should not manage indexes when config is turned off', function(done){
+        p.register(plugin, {
+          dbs: [{
+               connectionString: 'mongodb://127.0.0.1/test',
+               name: 'myconnection',
+               manageIndexes: false
+            }],
+            mongo: fakeMongo
+          }, function(err){
+            droppedIndexes.length.should.eql(0);
+            done(err);
+        });
+    });
+
     it('should expose the db connections using the get method', function(done){
       p.register(plugin, {
         dbs: [{
