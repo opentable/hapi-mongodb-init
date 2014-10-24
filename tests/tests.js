@@ -9,11 +9,9 @@ describe('db-init tests', function(){
         }],
         ensuredIndexes = [],
         droppedIndexes = [],
+        connectOptions,
         plugin = {
-            log: function(tags, log){},
-            expose: function(n, v){
-              db = v;
-            }
+            log: function(tags, log){}
         };
 
     var fakeMongo = {
@@ -22,6 +20,8 @@ describe('db-init tests', function(){
         if(a == "error"){
           return cb(new Error("connect has exploded"));
         }
+
+        connectOptions = b;
 
         cb(null, {
           collection: function(){
@@ -62,6 +62,32 @@ describe('db-init tests', function(){
             }],
             mongo: fakeMongo
           }, function(err){
+            done(err);
+        });
+    });
+
+    it('should pass the correct options to the mongo connect function', function(done){
+        p.register(plugin, {
+          dbs: [{
+               connectionString: 'mongodb://127.0.0.1/test',
+               name: 'myconnection',
+               indexes: []
+            }],
+            mongo: fakeMongo
+          }, function(err){
+            connectOptions.should.eql({
+              server: {
+                  auto_reconnect: true,
+                  poolSize: 10,
+                  socketOptions: {
+                      keepAlive: 1,
+                      socketTimeoutMS: 120000
+                  }
+              },
+              replSet: {
+                  strategy: "statistical"
+              }
+            })
             done(err);
         });
     });
