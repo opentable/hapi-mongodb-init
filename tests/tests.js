@@ -218,5 +218,17 @@ describe('db-init tests', function(){
             done(err == undefined ? new Error("expected an error from ensureIndex") : undefined);
         });
       });
+
+      it('should not break when indexes is missing', function(done){
+        p.register(plugin, {
+          dbs: [{
+               connectionString: 'mongodb://127.0.0.1',
+               name: 'myconnection'
+            }],
+            mongo: fakeMongo
+          }, function(err){
+            done(err);
+        });
+      });
     });
 });
