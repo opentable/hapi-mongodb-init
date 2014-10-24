@@ -1,5 +1,5 @@
-Hapi mongodb-init
----
+#Hapi mongodb-init
+[![Build Status](https://travis-ci.org/opentable/hapi-mongodb-init.png?branch=master)](https://travis-ci.org/opentable/hapi-mongodb-init) [![NPM version](https://badge.fury.io/js/hapi-mongodb-init.png)](http://badge.fury.io/js/hapi-mongodb-init) ![Dependencies](https://david-dm.org/opentable/hapi-mongodb-init.png)
 
 Initialises mongodb connections (per database), and manages indexes.
 
