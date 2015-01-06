@@ -160,6 +160,51 @@ describe('db-init tests', function(){
         });
     });
 
+    it('should pass through the expireAfterSeconds flag', function(done){
+        p.register(plugin, {
+          dbs: [{
+            connectionString: 'mongodb://127.0.0.1/test',
+            name: 'myconnection',
+            indexes: [ 
+              {
+                collection: 'mycoll',
+                name: 'myfield_1',
+                fields: {
+                  myfield: 1
+                },
+                expireAfterSeconds: 60
+              }
+            ]
+          }],
+          mongo: fakeMongo
+        }, function(err){
+          ensuredIndexes[0].names.expireAfterSeconds.should.eql(60);
+          done(err);
+        });
+    });
+
+   it('should not set expireAfterSeconds when it is not present in the config', function(done){
+        p.register(plugin, {
+          dbs: [{
+            connectionString: 'mongodb://127.0.0.1/test',
+            name: 'myconnection',
+            indexes: [
+              {
+                collection: 'mycoll',
+                name: 'myfield_1',
+                fields: {
+                  myfield: 1
+                },
+              }
+            ]
+          }],
+          mongo: fakeMongo
+        }, function(err){
+          (ensuredIndexes[0].names.expireAfterSeconds === undefined).should.eql(true);
+          done(err);
+        });
+    });
+
     it('should not manage indexes when config is turned off', function(done){
         p.register(plugin, {
           dbs: [{
