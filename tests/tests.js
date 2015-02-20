@@ -80,12 +80,11 @@ describe('db-init tests', function(){
                   auto_reconnect: true,
                   poolSize: 10,
                   socketOptions: {
-                      keepAlive: 1,
-                      socketTimeoutMS: 120000
+                      keepAlive: 1
                   }
               },
               replSet: {
-                  strategy: "statistical"
+                  strategy: "ping"
               }
             })
             done(err);
