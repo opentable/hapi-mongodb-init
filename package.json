@@ -1,6 +1,6 @@
 {
   "name": "hapi-mongodb-init",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "description": "initialises mongo db connections for hapi",
   "main": "index.js",
   "scripts": {
@@ -30,5 +30,8 @@
   "dependencies": {
     "async": "^1.4.0",
     "underscore": "^1.8.3"
+  },
+  "peerDependencies": {
+    "mongodb": "^2.0.0"
   }
 }
