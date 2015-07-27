@@ -23,23 +23,23 @@ describe('db-init tests', function(){
 
         connectOptions = b;
 
-        cb(null, {
+        return cb(null, {
           collection: function(){
             return {
               indexes: function(cb){
-                cb(null, actualIndexes);
+                return cb(null, actualIndexes);
               },
               ensureIndex: function(x, y, callback){
-                if(x == "error"){
-                  return cb(new Error("ensureIndex has exploded"));
+                if(x.error === 1){
+                  return callback(new Error("ensureIndex has exploded"));
                 }
 
                 ensuredIndexes.push({ fields: x, names: y });
-                callback();
+                return callback();
               },
               dropIndex: function(z, callback){
                 droppedIndexes.push(z);
-                callback();
+                return callback();
               }
             }
           },
@@ -164,7 +164,7 @@ describe('db-init tests', function(){
           dbs: [{
             connectionString: 'mongodb://127.0.0.1/test',
             name: 'myconnection',
-            indexes: [ 
+            indexes: [
               {
                 collection: 'mycoll',
                 name: 'myfield_1',
@@ -247,19 +247,36 @@ describe('db-init tests', function(){
         });
       });
 
-      it('should handle an error in ensureIndex', function(done){
+      it('should return an index error when failOnIndexes is true', function(done){
         p.register(plugin, {
           dbs: [{
                connectionString: 'mongodb://127.0.0.1:27017',
                name: 'myconnection',
                indexes: [{
                  collection: 'error',
-                 fields: 'error'
+                 fields: { 'error': 1 }
                }]
             }],
             mongo: fakeMongo
           }, function(err){
             done(err == undefined ? new Error("expected an error from ensureIndex") : undefined);
+        });
+      });
+
+      it('should ignore an index error when failOnIndexes is false', function(done){
+        p.register(plugin, {
+          dbs: [{
+               connectionString: 'mongodb://127.0.0.1:27017',
+               name: 'myconnection',
+               indexes: [{
+                 collection: 'error',
+                 fields: { 'error': 1 }
+               }]
+            }],
+            mongo: fakeMongo,
+            failOnIndexes: false
+          }, function(err){
+            done(err);
         });
       });
 
