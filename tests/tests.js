@@ -77,14 +77,10 @@ describe('db-init tests', function(){
           }, function(err){
             connectOptions.should.eql({
               server: {
-                  auto_reconnect: true,
-                  poolSize: 10,
-                  socketOptions: {
-                      keepAlive: 1
-                  }
+                  poolSize: 10
               },
               replSet: {
-                  strategy: "ping"
+                  connectWithNoPrimary: true
               }
             })
             done(err);
