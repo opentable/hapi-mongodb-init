@@ -3,7 +3,9 @@
 
 Initialises mongodb connections (per database), and manages indexes.
 
-This module doesn't explicitly depend on mongodb, but requires it to be passed in on the options. This means you're free to use your favourite version. Tested with 1.4.7 and up.
+This module doesn't explicitly depend on mongodb, but requires it to be passed in on the options. This means you're free to use your "favourite" version.
+
+Unfortunately thanks to the breaking changes introduced in the 2.x driver then hapi-mongodb-init@3.x.x will work with mongodb@2.x.x.
 
 To initialise:
 
@@ -33,6 +35,10 @@ server.plugin.register({
 });
 
 ```
+
+Other options:
+
+- `failOnIndexes` (true | false): optionally ignore any errors while managing indexes
 
 To use inside a module:
 
