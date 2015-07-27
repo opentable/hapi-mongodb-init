@@ -1,13 +1,19 @@
 var db = require("./lib/db"),
     indexes = require("./lib/indexes"),
+    _ = require("underscore"),
     async = require("async");
 
 exports.register = function(plugin, options, next){
 
+    var opts = _.extend({
+        failOnIndexes: true
+    }, options);
+
     plugin.log(["database-init"], "initialising db connections");
 
     var connect = function(connectionInfo, done){
-        db.init(connectionInfo, options.mongo, plugin, function(err){
+        connectionInfo.failOnIndexes = opts.failOnIndexes;
+        db.init(connectionInfo, opts.mongo, plugin, function(err){
             if(err){
               return done(err);
             }
