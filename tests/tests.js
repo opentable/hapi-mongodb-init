@@ -43,7 +43,8 @@ describe('db-init tests', function(){
               }
             }
           },
-          on: function(event, fn){}
+          on: function(event, fn){},
+          command: function(c, callback){ callback(); }
         });
       }
     };
