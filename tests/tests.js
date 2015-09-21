@@ -78,7 +78,7 @@ describe('db-init tests', function(){
           }, function(err){
             connectOptions.should.eql({
               server: {
-                  poolSize: 10
+                  poolSize: 5
               },
               replSet: {
                   connectWithNoPrimary: true
