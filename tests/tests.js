@@ -69,21 +69,115 @@ describe('db-init tests', function(){
 
     it('should pass the correct options to the mongo connect function', function(done){
         p.register(plugin, {
+            dbs: [{
+                connectionString: 'mongodb://127.0.0.1/test',
+                name: 'myconnection',
+                indexes: []
+            }],
+            mongo: fakeMongo
+        }, function(err){
+            connectOptions.should.eql({
+                server: {
+                    poolSize: 5
+                },
+                replSet: {
+                    connectWithNoPrimary: true
+                }
+            });
+            done(err);
+        });
+    });
+
+    it('should pass additional connection options to mongo connect function', function(done){
+        p.register(plugin, {
           dbs: [{
                connectionString: 'mongodb://127.0.0.1/test',
                name: 'myconnection',
                indexes: []
             }],
-            mongo: fakeMongo
+            mongo: fakeMongo,
+            connectionOptions: {
+                server: {
+                    poolSize: 15,
+                    reconnectTries : Number.MAX_VALUE,
+                    reconnectInterval: 100,
+                    socketTimeout: 10000
+                },
+                replSet: {
+                    connectWithNoPrimary: false
+                }
+            }
           }, function(err){
             connectOptions.should.eql({
-              server: {
-                  poolSize: 5
-              },
-              replSet: {
-                  connectWithNoPrimary: true
-              }
-            })
+                server: {
+                    poolSize: 15,
+                    reconnectTries : Number.MAX_VALUE,
+                    reconnectInterval: 100,
+                    socketTimeout: 10000
+                },
+                replSet: {
+                    connectWithNoPrimary: false
+                }
+            });
+            done(err);
+        });
+    });
+
+    it('should pass additional connection options to mongo connect function per database', function(done){
+        p.register(plugin, {
+            dbs: [{
+                connectionString: 'mongodb://127.0.0.1/test',
+                name: 'myconnection',
+                indexes: [],
+                connectionOptions: {
+                    server: {
+                        reconnectTries : Number.MAX_VALUE
+                    },
+                    replSet: {
+                        connectWithNoPrimary: false
+                    }
+                }
+            }],
+            mongo: fakeMongo
+        }, function(err){
+            connectOptions.should.eql({
+                server: {
+                    poolSize: 5,
+                    reconnectTries : Number.MAX_VALUE
+                },
+                replSet: {
+                    connectWithNoPrimary: false
+                }
+            });
+            done(err);
+        });
+    });
+
+    it('should preserve default connection options properly', function(done){
+        p.register(plugin, {
+            dbs: [{
+                connectionString: 'mongodb://127.0.0.1/test',
+                name: 'myconnection',
+                indexes: []
+            }],
+            mongo: fakeMongo,
+            connectionOptions: {
+                db: {
+                    raw: true
+                }
+            }
+        }, function(err){
+            connectOptions.should.eql({
+                server: {
+                    poolSize: 5
+                },
+                replSet: {
+                    connectWithNoPrimary: true
+                },
+                db: {
+                    raw: true
+                }
+            });
             done(err);
         });
     });
