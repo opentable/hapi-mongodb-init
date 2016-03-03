@@ -9,7 +9,7 @@ Unfortunately thanks to the breaking changes introduced in the 2.x driver then h
 
 To initialise:
 
-```
+```js
 var hapi = require("hapi");
 
 hapi.createServer();
@@ -30,11 +30,34 @@ server.plugin.register({
           }
          ]
       }],
-      mongo: require("mongodb")
+      mongo: require("mongodb"),
+      connectionOptions: {
+          server: {
+              poolSize: 15,
+              socketTimeout: 10000
+          },
+          replSet: {
+              connectWithNoPrimary: false
+          }
+      }
   }
 });
 
 ```
+
+`connectionOptions` parameter can be passed either as a child of options or per db. `connectionOptions` set for specific db take precedance over general ones.
+Default `connectionOptions`:
+```js
+{
+    server: {
+        poolSize: 5
+    },
+    replSet: {
+        connectWithNoPrimary: true
+    }
+}
+```
+
 
 Other options:
 
@@ -42,7 +65,7 @@ Other options:
 
 To use inside a module:
 
-```
+```js
 var dbs = require('hapi-mongodb-init');
 
 var db = dbs.db('myconnection');
@@ -58,7 +81,7 @@ For small data sets, (where building indexes is trivial), we find it works.
 
 You can turn off the index management by setting:
 
-```
+```js
 server.plugin.register({
   plugin: require("hapi-mongodb-init"),
   options: {
