@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:opentable/hapi-database-init.git"
+    "url": "git@github.com:opentable/hapi-mongodb-init.git"
   },
   "keywords": [
     "hapiplugin",
@@ -17,9 +17,9 @@
   "author": "Andy Royle <ajroyle@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/opentable/hapi-database-init/issues"
+    "url": "https://github.com/opentable/hapi-mongodb-init/issues"
   },
-  "homepage": "https://github.com/opentable/hapi-database-init",
+  "homepage": "https://github.com/opentable/hapi-mongodb-init",
   "devDependencies": {
     "grunt": "^0.4.5",
     "grunt-cli": "^0.1.13",
