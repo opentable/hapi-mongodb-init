@@ -1,7 +1,7 @@
 describe('db-init tests', function(){
     var should = require('should'),
         p = require('../index.js'),
-        db, actualIndexes = [{
+        actualIndexes = [{
           name: 'shouldbedropped'
         },
         {
@@ -24,6 +24,9 @@ describe('db-init tests', function(){
         connectOptions = b;
 
         return cb(null, {
+          db: function(dbname) {
+            return dbname;
+          },
           collection: function(){
             return {
               indexes: function(cb){
@@ -152,6 +155,41 @@ describe('db-init tests', function(){
             done(err);
         });
     });
+
+    it('should connect singularly to the database with collections', function(done){
+        p.register(plugin, {
+            dbs: [{
+                connectionString: 'mongodb://127.0.0.1',
+                name: 'myconnection',
+                indexes: [],
+                collections: [
+                    {
+                        dbName: "db1",
+                        name: "collection1"
+
+                    },
+                    {
+                        dbName: "db2",
+                        name: "collection2"
+                    }
+                ],
+                connectionOptions: {
+                    server: {
+                        reconnectTries : Number.MAX_VALUE
+                    },
+                    replSet: {
+                        connectWithNoPrimary: false
+                    }
+                }
+            }],
+            mongo: fakeMongo
+        }, function(err){
+            p.db('collection1').should.eql('db1');
+            p.db('collection2').should.eql('db2');
+            done(err);
+        });
+    });
+
 
     it('should preserve default connection options properly', function(done){
         p.register(plugin, {
