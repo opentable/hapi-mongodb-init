@@ -26,7 +26,8 @@ server.plugin.register({
               name: "myfield_1",
               fields: {
                   myfield: 1
-              }
+              },
+              unique: false
           }
          ]
       }],
