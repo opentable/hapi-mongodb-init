@@ -25,29 +25,31 @@ describe('db-init tests', function(){
 
         return cb(null, {
           db: function(dbname) {
-            return dbname;
-          },
-          collection: function(){
             return {
-              indexes: function(cb){
-                return cb(null, actualIndexes);
-              },
-              ensureIndex: function(x, y, callback){
-                if(x.error === 1){
-                  return callback(new Error("ensureIndex has exploded"));
+              dbname,
+              collection: function(){
+                return {
+                  indexes: function(cb){
+                    return cb(null, actualIndexes);
+                  },
+                  ensureIndex: function(x, y, callback){
+                    if(x.error === 1){
+                      return callback(new Error("ensureIndex has exploded"));
+                    }
+    
+                    ensuredIndexes.push({ fields: x, names: y });
+                    return callback();
+                  },
+                  dropIndex: function(z, callback){
+                    droppedIndexes.push(z);
+                    return callback();
+                  }
                 }
-
-                ensuredIndexes.push({ fields: x, names: y });
-                return callback();
               },
-              dropIndex: function(z, callback){
-                droppedIndexes.push(z);
-                return callback();
-              }
-            }
+              command: function(c, callback){ callback(); }
+            };
           },
           on: function(event, fn){},
-          command: function(c, callback){ callback(); }
         });
       }
     };
@@ -62,6 +64,7 @@ describe('db-init tests', function(){
           dbs: [{
                connectionString: 'mongodb://127.0.0.1/test',
                name: 'myconnection',
+               dbName: 'mydatabase',
                indexes: []
             }],
             mongo: fakeMongo
@@ -75,6 +78,7 @@ describe('db-init tests', function(){
             dbs: [{
                 connectionString: 'mongodb://127.0.0.1/test',
                 name: 'myconnection',
+                dbName: 'mydatabase',
                 indexes: []
             }],
             mongo: fakeMongo
@@ -96,6 +100,7 @@ describe('db-init tests', function(){
           dbs: [{
                connectionString: 'mongodb://127.0.0.1/test',
                name: 'myconnection',
+               dbName: 'mydatabase',
                indexes: []
             }],
             mongo: fakeMongo,
@@ -131,6 +136,7 @@ describe('db-init tests', function(){
             dbs: [{
                 connectionString: 'mongodb://127.0.0.1/test',
                 name: 'myconnection',
+                dbName: 'mydatabase',
                 indexes: [],
                 connectionOptions: {
                     server: {
@@ -184,8 +190,8 @@ describe('db-init tests', function(){
             }],
             mongo: fakeMongo
         }, function(err){
-            p.db('collection1').should.eql('db1');
-            p.db('collection2').should.eql('db2');
+            p.db('collection1').dbname.should.eql('db1');
+            p.db('collection2').dbname.should.eql('db2');
             done(err);
         });
     });
@@ -196,6 +202,7 @@ describe('db-init tests', function(){
             dbs: [{
                 connectionString: 'mongodb://127.0.0.1/test',
                 name: 'myconnection',
+                dbName: 'mydatabase',
                 indexes: []
             }],
             mongo: fakeMongo,
@@ -224,6 +231,7 @@ describe('db-init tests', function(){
         p.register(plugin, {
           dbs: [{
                connectionString: 'mongodb://127.0.0.1/test',
+               dbName: 'mydatabase',
                indexes: [
                 {
                     collection: 'mycoll',
@@ -247,6 +255,7 @@ describe('db-init tests', function(){
           dbs: [{
                connectionString: 'mongodb://127.0.0.1/test',
                name: 'myconnection',
+               dbName: 'mydatabase',
                indexes: [
                 {
                     collection: 'mycoll',
@@ -269,6 +278,7 @@ describe('db-init tests', function(){
           dbs: [{
                connectionString: 'mongodb://127.0.0.1/test',
                name: 'myconnection',
+               dbName: 'mydatabase',
                indexes: [
                 {
                     collection: 'mycoll',
@@ -293,6 +303,7 @@ describe('db-init tests', function(){
           dbs: [{
             connectionString: 'mongodb://127.0.0.1/test',
             name: 'myconnection',
+            dbName: 'mydatabase',
             indexes: [
               {
                 collection: 'mycoll',
@@ -316,6 +327,7 @@ describe('db-init tests', function(){
           dbs: [{
             connectionString: 'mongodb://127.0.0.1/test',
             name: 'myconnection',
+            dbName: 'mydatabase',
             indexes: [
               {
                 collection: 'mycoll',
@@ -338,6 +350,7 @@ describe('db-init tests', function(){
           dbs: [{
                connectionString: 'mongodb://127.0.0.1/test',
                name: 'myconnection',
+               dbName: 'mydatabase',
                manageIndexes: false
             }],
             mongo: fakeMongo
@@ -352,11 +365,11 @@ describe('db-init tests', function(){
         dbs: [{
              connectionString: 'mongodb://127.0.0.1:27017',
              name: 'myconnection',
+             dbName: 'mydatabase',
              indexes: []
           }],
           mongo: fakeMongo
         }, function(err){
-
           p.db('myconnection').should.not.eql(undefined);
           done(err);
       });
@@ -368,6 +381,7 @@ describe('db-init tests', function(){
           dbs: [{
                connectionString: 'error',
                name: 'myconnection',
+               dbName: 'mydatabase',
                indexes: []
             }],
             mongo: fakeMongo
@@ -381,6 +395,7 @@ describe('db-init tests', function(){
           dbs: [{
                connectionString: 'mongodb://127.0.0.1:27017',
                name: 'myconnection',
+               dbName: 'mydatabase',
                indexes: [{
                  collection: 'error',
                  fields: { 'error': 1 }
@@ -397,6 +412,7 @@ describe('db-init tests', function(){
           dbs: [{
                connectionString: 'mongodb://127.0.0.1:27017',
                name: 'myconnection',
+               dbName: 'mydatabase',
                indexes: [{
                  collection: 'error',
                  fields: { 'error': 1 }
@@ -413,7 +429,8 @@ describe('db-init tests', function(){
         p.register(plugin, {
           dbs: [{
                connectionString: 'mongodb://127.0.0.1',
-               name: 'myconnection'
+               name: 'myconnection',
+               dbName: 'mydatabase'
             }],
             mongo: fakeMongo
           }, function(err){
