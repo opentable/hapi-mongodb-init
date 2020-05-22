@@ -25,11 +25,11 @@
     "grunt-cli": "^0.1.13",
     "grunt-contrib-jshint": "^0.11.2",
     "grunt-mocha-test": "^0.12.7",
+    "mocha": "^7.1.2",
     "should": "^7.0.2"
   },
   "dependencies": {
     "async": "^1.4.0",
-    "mocha": "^7.1.2",
     "underscore": "^1.8.3"
   },
   "peerDependencies": {
