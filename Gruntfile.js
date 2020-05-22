@@ -13,7 +13,7 @@ module.exports = function(grunt) {
                 jshintrc: '.jshintrc'
             }
         },
-        mochaTest:{
+        mochaTest: {
             options: {
                 reporter: 'spec'
             },

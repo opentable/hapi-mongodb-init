@@ -6,6 +6,7 @@ Initialises mongodb connections (per database), and manages indexes.
 This module doesn't explicitly depend on mongodb, but requires it to be passed in on the options. This means you're free to use your "favourite" version.
 
 Unfortunately thanks to the breaking changes introduced in the 2.x driver then hapi-mongodb-init@3.x.x will work with mongodb@2.x.x.
+Breaking changes are introduced in the 3.x driver too then hapi-mongodb-init@4.x.x will work with mongodb@3.x.x.
 
 To initialise:
 
@@ -20,6 +21,7 @@ server.plugin.register({
     dbs: [{
          connectionString: 'mongodb://127.0.0.1/test',
          name: 'myconnection',
+         dbName: 'mydatabase',
          indexes: [
           {
               collection: 'mycoll',
@@ -89,6 +91,7 @@ server.plugin.register({
     dbs: [{
          connectionString: 'mongodb://127.0.0.1/test',
          name: 'myconnection',
+         dbName: 'mydatabase',
          manageIndexes: false
       }],
       mongo: require("mongodb")
